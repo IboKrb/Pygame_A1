@@ -1,72 +1,78 @@
-import pygame as pg
+import pygame
+import os
 
 
-class settings():
-    """A class to store all settings for Alien Invasion."""
+class Settings:
+    window_width = 500
+    window_height = 700
+    path_file = os.path.dirname(os.path.abspath(__file__))
+    path_image = os.path.join(path_file, "images")
+    fps = 60
+    caption = "Ibrahim Aldemir GAME"
+    alien_width = 70
+    alien_height = 70
+    alien_pos_x = 100
+    alien_pos_y = 200
 
-    def __init__(self):
-        """Initialize the game's settings."""
-        # Screen settings
-        self.screen_width = 1200
-        self.screen_height = 800
-        self.bg_color = (230, 230, 230)
+class Background(object):
+    def __init__(self, filename="background.png") -> None:
+        super().__init__()
+        self.image = pygame.image.load(os.path.join(Settings.path_image, filename)).convert()
+        self.image = pygame.transform.scale(self.image, (Settings.window_width, Settings.window_height))
 
-        # Ship settings
-        self.ship_speed_factor = 1.5
-        self.ship_limit = 3
-        self.ship_location = (self.screen_width / 2, self.screen_height - 50)
-        
-        # Bullet settings
-        self.bullet_speed_factor = 3
-        self.bullet_width = 3
-        self.bullet_height = 15
-        self.bullet_color = 60, 60, 60
-        self.bullets_allowed = 3
+    def draw(self, screen):
+        screen.blit(self.image, (0, 0))
 
-        # Alien settings
-        self.alien_speed_factor = 1
-        self.fleet_drop_speed = 10
-        # fleet_direction of 1 represents right; -1 represents left.
-        self.fleet_direction = 1
 
-        # How quickly the game speeds up
-        self.speedup_scale = 1.1
+class Alien(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load(os.path.join(Settings.path_image, "alien.png")).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (Settings.alien_width, Settings.alien_height))
+        self.rect = self.image.get_rect()
+        self.rect.left = Settings.alien_pos_x
+        self.rect.top = Settings.alien_pos_y
+        self.speed_h = 2
+        self.speed_v = 2
 
-        # How quickly the alien point values increase
-        self.score_scale = 1.5
+    def update(self):
+        if self.rect.right + self.speed_h > Settings.window_width:
+            self.speed_h *= -1
+        if self.rect.bottom + self.speed_v > Settings.window_height:
+            self.speed_v *= -1
+        if self.rect.left + self.speed_h < 0:
+            self.speed_h *= -1
+        if self.rect.top + self.speed_v < 0:
+            self.speed_v *= -1
+        self.rect.move_ip((self.speed_h, self.speed_v))
 
-        self.initialize_dynamic_settings()
+    def draw(self, screen):
+        screen.blit(self.image,self.rect)
 
-    def initialize_dynamic_settings(self):
-        """Initialize settings that change throughout the game."""
-        self.ship_speed_factor = 1.5
-        self.bullet_speed_factor = 3
-        self.alien_speed_factor = 1
+if __name__ == "__main__":
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "200,100"
 
-        # fleet_direction of 1 represents right; -1 represents left.
-        self.fleet_direction = 1
+    pygame.init()
+    pygame.display.set_caption(Settings.caption)
+    screen = pygame.display.set_mode((Settings.window_width, Settings.window_height))
+    clock = pygame.time.Clock()
+    background = Background()
 
-        # Scoring
-        self.alien_points = 50
+    alien = Alien()
 
-    def increase_speed(self):
-        """Increase speed settings and alien point values."""
-        self.ship_speed_factor *= self.speedup_scale
-        self.bullet_speed_factor *= self.speedup_scale
-        self.alien_speed_factor *= self.speedup_scale
-class Sprites():
-    """A class to store all sprites."""
-    def __init__(self):
-        """Initialize the sprites."""
-        self.ship = pg.image.load('images/ship.bmp')
-        self.bullet = pg.image.load('images/bullet.bmp')
-        self.alien = pg.image.load('images/alien.bmp')
-    def draw_ship(self, screen, x, y):
-        """Draw the ship at the given location."""
-        screen.blit(self.ship, (x, y)) 
+    running = True
+    while running:
+        clock.tick(Settings.fps)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-class Object():
-class Player():
-class meteors():
-class Game():
-class main():
+        alien.update()
+
+        background.draw(screen)
+        alien.draw(screen)
+        pygame.display.flip()
+    pygame.quit()
