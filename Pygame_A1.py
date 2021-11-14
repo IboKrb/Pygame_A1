@@ -13,6 +13,8 @@ class Settings:
     alien_height = 70
     alien_pos_x = 100
     alien_pos_y = 200
+    bullet_width = 70
+    bullet_height = 70
 
 class Background(object):
     def __init__(self, filename="background.png") -> None:
@@ -26,7 +28,6 @@ class Background(object):
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self) -> None:
-        super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "alien.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (Settings.alien_width, Settings.alien_height))
         self.rect = self.image.get_rect()
@@ -62,6 +63,18 @@ class Alien(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+class bullet(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
+        self.image = pygame.transform.scale(self.image,(Settings.bullet_width, Settings.bullet_height))
+        self.rect = self.image.get_rect()
+        self.rect.left = Settings.alien_pos_x
+        self.rect.top = Settings.alien_pos_y
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
 if __name__ == "__main__":
     os.environ['SDL_VIDEO_WINDOW_POS'] = "200,100"
 
@@ -82,7 +95,6 @@ if __name__ == "__main__":
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
 
         background.draw(screen)
         alien.draw(screen)
