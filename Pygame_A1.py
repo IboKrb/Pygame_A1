@@ -3,8 +3,8 @@ import os
 
 
 class Settings:
-    window_width = 500
-    window_height = 700
+    window_width = 600
+    window_height = 800
     path_file = os.path.dirname(os.path.abspath(__file__))
     path_image = os.path.join(path_file, "images")
     fps = 60
@@ -48,6 +48,16 @@ class Alien(pygame.sprite.Sprite):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 self.rect.left += self.speed_v
+
+        if self.rect.top == Settings.window_height :
+            self.rect.top = 0
+        if self.rect.left == Settings.window_width:
+            self.rect.left = 0
+        if self.rect.top <= -1:
+            self.rect.top = Settings.window_height
+        if self.rect.left <= -1:
+            self.rect.left = Settings.window_width
+
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
