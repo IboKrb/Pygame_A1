@@ -32,22 +32,25 @@ class Alien(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = Settings.alien_pos_x
         self.rect.top = Settings.alien_pos_y
-        self.speed_h = 2
-        self.speed_v = 2
+        self.speed_h = 10
+        self.speed_v = 10
 
     def update(self):
-        if self.rect.right + self.speed_h > Settings.window_width:
-            self.speed_h *= -1
-        if self.rect.bottom + self.speed_v > Settings.window_height:
-            self.speed_v *= -1
-        if self.rect.left + self.speed_h < 0:
-            self.speed_h *= -1
-        if self.rect.top + self.speed_v < 0:
-            self.speed_v *= -1
-        self.rect.move_ip((self.speed_h, self.speed_v))
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                self.rect.top -= self.speed_h
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DOWN:
+                self.rect.top += self.speed_h
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                self.rect.left -= self.speed_v
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                self.rect.left += self.speed_v
 
     def draw(self, screen):
-        screen.blit(self.image,self.rect)
+        screen.blit(self.image, self.rect)
 
 if __name__ == "__main__":
     os.environ['SDL_VIDEO_WINDOW_POS'] = "200,100"
@@ -70,9 +73,9 @@ if __name__ == "__main__":
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        alien.update()
 
         background.draw(screen)
         alien.draw(screen)
+        alien.update()
         pygame.display.flip()
     pygame.quit()
