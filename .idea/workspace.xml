@@ -155,16 +155,16 @@
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
     <state width="1877" height="348" key="GridCell.Tab.1.right/1920.40.1920.1040/0.40.1920.1040/-1080.40.1080.1880@0.40.1920.1040" timestamp="1636907056518" />
-    <state x="390" y="115" width="1309" height="801" key="SettingsEditor" timestamp="1636835374797">
+    <state x="390" y="115" width="1309" height="801" key="SettingsEditor" timestamp="1636989628044">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
-    <state x="390" y="115" width="1309" height="801" key="SettingsEditor/1920.40.1920.1040/0.40.1920.1040/-1080.40.1080.1880@0.40.1920.1040" timestamp="1636835374797" />
+    <state x="390" y="115" width="1309" height="801" key="SettingsEditor/1920.40.1920.1040/0.40.1920.1040/-1080.40.1080.1880@0.40.1920.1040" timestamp="1636989628044" />
     <state x="777" y="474" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1636839299999">
       <screen x="0" y="40" width="1920" height="1040" />
     </state>
     <state x="777" y="474" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.40.1920.1040/0.40.1920.1040/-1080.40.1080.1880@0.40.1920.1040" timestamp="1636839299999" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Pygame_A1$Pygame_A1.coverage" NAME="Pygame_A1 Coverage Results" MODIFIED="1636906855963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Pygame_A1$Pygame_A1.coverage" NAME="Pygame_A1 Coverage Results" MODIFIED="1636991402928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
