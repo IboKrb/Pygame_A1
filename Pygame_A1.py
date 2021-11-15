@@ -52,7 +52,8 @@ class Alien(pygame.sprite.Sprite):
             if event.key == pygame.K_RIGHT:
                 self.rect.left += self.speed_v
 
-        if self.rect.top == Settings.window_height :
+    def update(self):
+        if self.rect.top == Settings.window_height:
             self.rect.top = 0
         if self.rect.left == Settings.window_width:
             self.rect.left = 0
@@ -65,14 +66,15 @@ class Alien(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+
 class bullet(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image,(Settings.bullet_width, Settings.bullet_height))
+        self.image = pygame.transform.scale(self.image, (Settings.bullet_width, Settings.bullet_height))
         self.rect = self.image.get_rect()
-        self.rect.left = Settings.alien_pos_x
-        self.rect.top = Settings.alien_pos_y
+        self.rect.left = 200
+        self.rect.top = 200
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -100,6 +102,7 @@ if __name__ == "__main__":
 
         background.draw(screen)
         alien.draw(screen)
+        alien.move()
         alien.update()
         pygame.display.flip()
     pygame.quit()
