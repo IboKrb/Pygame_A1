@@ -16,6 +16,7 @@ class Settings:
     bullet_width = 70
     bullet_height = 70
 
+
 class Background(object):
     def __init__(self, filename="background.png") -> None:
         super().__init__()
@@ -28,6 +29,7 @@ class Background(object):
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self) -> None:
+        super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "alien.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (Settings.alien_width, Settings.alien_height))
         self.rect = self.image.get_rect()
@@ -36,7 +38,7 @@ class Alien(pygame.sprite.Sprite):
         self.speed_h = 10
         self.speed_v = 10
 
-    def update(self):
+    def move(self):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 self.rect.top -= self.speed_h
