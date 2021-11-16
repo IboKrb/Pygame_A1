@@ -17,6 +17,11 @@ class Settings:
     bullet_height = 70
 
 
+
+
+
+ 
+
 class Background(object):
     def __init__(self, filename="background.png") -> None:
         super().__init__()
