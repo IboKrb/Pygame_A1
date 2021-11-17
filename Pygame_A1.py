@@ -66,30 +66,65 @@ class bullet(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
-if __name__ == "__main__":
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "200,100"
 
-    pygame.init()
-    pygame.display.set_caption(Settings.caption)
-    screen = pygame.display.set_mode((Settings.window_width, Settings.window_height))
-    clock = pygame.time.Clock()
-    background = Background()
 
-    alien = Alien()
+class Game(object):
+    def __init__(self, ) -> None:
+        super().__init__()
 
-    running = True
-    while running:
-        clock.tick(Settings.fps)
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "200,200"
+
+        pygame.init()
+        pygame.display.set_caption(Settings.caption)
+        self.screen = pygame.display.set_mode((Settings.window_width, Settings.window_height))
+        self.clock = pygame.time.Clock()
+        self.background = Background()
+        self.alien = Alien()
+        self.bullet = Bullet()
+
+    def run(self):
+        self.running = True
+        while self.running:
+            self.clock.tick(Settings.fps)
+            self.watch_for_events()
+            self.update()
+            self.draw1()
+
+        pygame.quit()
+        pygame.quit()
+
+    def update(self):
+        self.alien.update()
+
+    def draw1(self):
+        self.background.draw(self.screen)
+        self.alien.draw(self.screen)
+        self.bullet.draw(self.screen)
+        pygame.display.flip()
+
+
+
+    def watch_for_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    running = False
+                    self.running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.alien.rect.top -= self.alien.speed_h
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    self.alien.rect.top += self.alien.speed_h
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.alien.rect.left -= self.alien.speed_v
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.alien.rect.left += self.alien.speed_v
 
-        background.draw(screen)
-        alien.draw(screen)
-        alien.move()
-        alien.update()
-        pygame.display.flip()
-    pygame.quit()
+
+if __name__ == '__main__':
+    game = Game()
+    game.run()
