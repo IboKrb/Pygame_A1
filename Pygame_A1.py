@@ -54,7 +54,7 @@ class Alien(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
 
-class bullet(pygame.sprite.Sprite):
+class Bullet(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
