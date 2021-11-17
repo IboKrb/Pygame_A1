@@ -1,7 +1,6 @@
 import pygame
 import os
-
-
+from random import randint
 class Settings:
     window_width = 600
     window_height = 800
@@ -37,6 +36,7 @@ class Alien(pygame.sprite.Sprite):
         self.rect.top = Settings.alien_pos_y
         self.speed_h = 30
         self.speed_v = 30
+        self.lives = 3
 
 
     def update(self):
@@ -58,10 +58,23 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (Settings.bullet_width, Settings.bullet_height))
+
+        scale_ratio = randint(1, 3) / 4
+        self.image = pygame.transform.scale(self.image, (
+            int(self.image.get_rect().width * scale_ratio),
+            int(self.image.get_rect().height * scale_ratio)
+        ))
+
+        self.image = self.image
         self.rect = self.image.get_rect()
-        self.rect.left = 200
-        self.rect.top = 200
+
+
+        self.speed_x = randint(1, 3)
+
+        self.speed_y = randint(1, 3)
+
+    def update(self):
+        self.rect.move_ip((self.speed_x, self.speed_y))
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -91,16 +104,18 @@ class Game(object):
             self.draw1()
 
         pygame.quit()
-        pygame.quit()
 
     def update(self):
         self.alien.update()
         self.check_for_collision()
+        self.bullet.rect.move_ip((self.bullet.speed_x, self.bullet.speed_y))
 
     def check_for_collision(self):
         self.bullet.hit = pygame.sprite.collide_mask(self.bullet, self.alien)
         if self.bullet.hit:
-            print("gut")
+            self.alien.rect.top = 700
+            self.alien.rect.left = 270
+            self.alien.lives -=1
 
 
     def draw1(self):
