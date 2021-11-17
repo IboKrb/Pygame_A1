@@ -17,7 +17,7 @@ class Settings:
     bullet_height = 70
 
 
-class Background(object):
+class Background(pygame.sprite.Sprite):
     def __init__(self, filename="background.png") -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, filename)).convert()
@@ -40,14 +40,14 @@ class Alien(pygame.sprite.Sprite):
 
 
     def update(self):
-        if self.rect.top == Settings.window_height:
-            self.rect.top = 0
-        if self.rect.left == Settings.window_width:
-            self.rect.left = 0
-        if self.rect.top <= -1:
-            self.rect.top = Settings.window_height
-        if self.rect.left <= -1:
-            self.rect.left = Settings.window_width
+        if self.rect.top >= Settings.window_height - 60:
+            self.rect.top = Settings.window_height - 70
+        if self.rect.left >= Settings.window_width -50:
+            self.rect.left = Settings.window_width -50
+        if self.rect.top <= 1 :
+            self.rect.top = 1
+        if self.rect.left <= 1:
+            self.rect.left = 1
 
 
     def draw(self, screen):
