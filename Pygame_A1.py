@@ -68,9 +68,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image = self.image
         self.rect = self.image.get_rect()
 
-
         self.speed_x = randint(1, 3)
-
         self.speed_y = randint(1, 3)
 
     def update(self):
@@ -102,7 +100,6 @@ class Game(object):
             self.watch_for_events()
             self.update()
             self.draw1()
-
         pygame.quit()
 
     def update(self):
@@ -133,16 +130,17 @@ class Game(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
-            if event.type == pygame.KEYDOWN:
+            #Movment
+            if event.type == pygame.KEYDOWN:#hoch
                 if event.key == pygame.K_UP:
                     self.alien.rect.top -= self.alien.speed_h
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:#runter
                 if event.key == pygame.K_DOWN:
                     self.alien.rect.top += self.alien.speed_h
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:#links
                 if event.key == pygame.K_LEFT:
                     self.alien.rect.left -= self.alien.speed_v
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN:#rechts
                 if event.key == pygame.K_RIGHT:
                     self.alien.rect.left += self.alien.speed_v
 
