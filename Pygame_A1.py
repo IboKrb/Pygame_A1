@@ -95,6 +95,13 @@ class Game(object):
 
     def update(self):
         self.alien.update()
+        self.check_for_collision()
+
+    def check_for_collision(self):
+        self.bullet.hit = pygame.sprite.collide_mask(self.bullet, self.alien)
+        if self.bullet.hit:
+            print("gut")
+
 
     def draw1(self):
         self.background.draw(self.screen)
