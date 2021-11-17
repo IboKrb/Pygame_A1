@@ -35,22 +35,9 @@ class Alien(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = Settings.alien_pos_x
         self.rect.top = Settings.alien_pos_y
-        self.speed_h = 10
-        self.speed_v = 10
+        self.speed_h = 30
+        self.speed_v = 30
 
-    def move(self):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.rect.top -= self.speed_h
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_DOWN:
-                self.rect.top += self.speed_h
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.rect.left -= self.speed_v
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                self.rect.left += self.speed_v
 
     def update(self):
         if self.rect.top == Settings.window_height:
