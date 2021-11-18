@@ -1,6 +1,8 @@
 import pygame
 import os
 from random import randint
+
+
 class Settings:
     window_width = 600
     window_height = 800
@@ -38,17 +40,15 @@ class Alien(pygame.sprite.Sprite):
         self.speed_v = 30
         self.lives = 3
 
-
     def update(self):
         if self.rect.top >= Settings.window_height - 60:
             self.rect.top = Settings.window_height - 70
-        if self.rect.left >= Settings.window_width -50:
-            self.rect.left = Settings.window_width -50
-        if self.rect.top <= 1 :
+        if self.rect.left >= Settings.window_width - 50:
+            self.rect.left = Settings.window_width - 50
+        if self.rect.top <= 1:
             self.rect.top = 1
         if self.rect.left <= 1:
             self.rect.left = 1
-
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -59,7 +59,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
 
-        scale_ratio = randint(1, 3) / 4
+        scale_ratio = randint(1, 2) / 4
         self.image = pygame.transform.scale(self.image, (
             int(self.image.get_rect().width * scale_ratio),
             int(self.image.get_rect().height * scale_ratio)
@@ -67,23 +67,22 @@ class Bullet(pygame.sprite.Sprite):
 
         self.image = self.image
         self.rect = self.image.get_rect()
-
-        self.speed_x = randint(1, 3)
-        self.speed_y = randint(1, 3)
+        self.rect.centerx = randint(10, 490)
+        self.speed_x = randint(1,3)
+        self.speed_y = randint(1,3)
 
     def update(self):
-        self.rect.move_ip((self.speed_x, self.speed_y))
+        self.rect.move_ip(0, self.speed_x * self.speed_y)
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-
 
 
 class Game(object):
     def __init__(self, ) -> None:
         super().__init__()
 
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "200,200"
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100"
 
         pygame.init()
         pygame.display.set_caption(Settings.caption)
@@ -105,23 +104,20 @@ class Game(object):
     def update(self):
         self.alien.update()
         self.check_for_collision()
-        self.bullet.rect.move_ip((self.bullet.speed_x, self.bullet.speed_y))
+        self.bullet.update()
 
     def check_for_collision(self):
         self.bullet.hit = pygame.sprite.collide_mask(self.bullet, self.alien)
         if self.bullet.hit:
             self.alien.rect.top = 700
             self.alien.rect.left = 270
-            self.alien.lives -=1
-
+            self.alien.lives -= 1
 
     def draw1(self):
         self.background.draw(self.screen)
         self.alien.draw(self.screen)
         self.bullet.draw(self.screen)
         pygame.display.flip()
-
-
 
     def watch_for_events(self):
         for event in pygame.event.get():
@@ -130,17 +126,17 @@ class Game(object):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
-            #Movment
-            if event.type == pygame.KEYDOWN:#hoch
+            # Movment
+            if event.type == pygame.KEYDOWN:  # hoch
                 if event.key == pygame.K_UP:
                     self.alien.rect.top -= self.alien.speed_h
-            if event.type == pygame.KEYDOWN:#runter
+            if event.type == pygame.KEYDOWN:  # runter
                 if event.key == pygame.K_DOWN:
                     self.alien.rect.top += self.alien.speed_h
-            if event.type == pygame.KEYDOWN:#links
+            if event.type == pygame.KEYDOWN:  # links
                 if event.key == pygame.K_LEFT:
                     self.alien.rect.left -= self.alien.speed_v
-            if event.type == pygame.KEYDOWN:#rechts
+            if event.type == pygame.KEYDOWN:  # rechts
                 if event.key == pygame.K_RIGHT:
                     self.alien.rect.left += self.alien.speed_v
 
