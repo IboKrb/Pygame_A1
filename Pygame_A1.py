@@ -93,6 +93,7 @@ class Game(object):
         self.bullet = Bullet()
 
     def run(self):
+        self.running = True
         while self.running:
             self.clock.tick(Settings.fps)
             self.watch_for_events()
