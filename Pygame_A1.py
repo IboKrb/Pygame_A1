@@ -81,8 +81,8 @@ class Bullet(pygame.sprite.Sprite):
 class Game(object):
     def __init__(self, ) -> None:
         super().__init__()
-
         os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100"
+
 
         pygame.init()
         pygame.display.set_caption(Settings.caption)
@@ -93,7 +93,6 @@ class Game(object):
         self.bullet = Bullet()
 
     def run(self):
-        self.running = True
         while self.running:
             self.clock.tick(Settings.fps)
             self.watch_for_events()
