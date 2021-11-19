@@ -12,21 +12,42 @@ class Settings:
     caption = "Ibrahim Aldemir GAME"
     alien_width = 70
     alien_height = 70
-    alien_pos_x = 100
-    alien_pos_y = 200
+    alien_pos_x = 250
+    alien_pos_y = 600
     bullet_width = 70
     bullet_height = 70
+    nof_bullets = 6
+    punkte = 0
+    heart_width = 80
+    heart_height = 60
+    lives = 3
 
-
-class Background(pygame.sprite.Sprite):
-    def __init__(self, filename="background.png") -> None:
+class Frontground(pygame.sprite.Sprite):
+    def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load(os.path.join(Settings.path_image, filename)).convert()
-        self.image = pygame.transform.scale(self.image, (Settings.window_width, Settings.window_height))
+        self.image = pygame.image.load(os.path.join(Settings.path_image, "heart.png")).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (Settings.heart_width, Settings.heart_height))
+
 
     def draw(self, screen):
         screen.blit(self.image, (0, 0))
 
+        punkte = pygame.font.SysFont(pygame.font.get_default_font(), 50)
+        punktetxt=punkte.render(f"Punkte:{Settings.punkte}",1,(255,255,255))
+        screen.blit(punktetxt,(420,750))
+
+        lives = pygame.font.SysFont(pygame.font.get_default_font(), 50)
+        livestxt=lives.render(f"x{Settings.lives}",1,(255,255,255))
+        screen.blit(livestxt,(60,20))
+
+class Background(pygame.sprite.Sprite):
+    def __init__(self, filename="background.png") -> None:
+        super().__init__()
+        self.image = pygame.image.load(os.path.join(Settings.path_image, filename)).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (Settings.window_width, Settings.window_height))
+
+    def draw(self, screen):
+        screen.blit(self.image, (0, 0))
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self) -> None:
@@ -36,9 +57,9 @@ class Alien(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = Settings.alien_pos_x
         self.rect.top = Settings.alien_pos_y
-        self.speed_h = 30
-        self.speed_v = 30
-        self.lives = 3
+        self.speed_h = 40
+        self.speed_v = 40
+        self.lives = Settings.lives
 
     def update(self):
         if self.rect.top >= Settings.window_height - 60:
@@ -59,7 +80,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()
 
-        scale_ratio = randint(1, 2) / 4
+        scale_ratio = randint(1, 3) / 4
         self.image = pygame.transform.scale(self.image, (
             int(self.image.get_rect().width * scale_ratio),
             int(self.image.get_rect().height * scale_ratio)
@@ -67,12 +88,15 @@ class Bullet(pygame.sprite.Sprite):
 
         self.image = self.image
         self.rect = self.image.get_rect()
-        self.rect.centerx = randint(10, 490)
         self.speed_x = randint(1,3)
         self.speed_y = randint(1,3)
 
     def update(self):
         self.rect.move_ip(0, self.speed_x * self.speed_y)
+        if self.rect.top >= Settings.window_height:
+            self.rect.centerx = randint(0,Settings.window_width)
+            self.rect.centery = randint(0,10)
+            Settings.punkte += 1
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -88,34 +112,62 @@ class Game(object):
         pygame.display.set_caption(Settings.caption)
         self.screen = pygame.display.set_mode((Settings.window_width, Settings.window_height))
         self.clock = pygame.time.Clock()
+        self.frontground= Frontground()
         self.background = Background()
-        self.alien = Alien()
         self.bullet = Bullet()
+        self.alien = Alien()
+        self.all_bullets = pygame.sprite.Group()
+        self.all_bullets.add(self.bullet)
+
 
     def run(self):
+        self.start()
+        self.running = True
         while self.running:
             self.clock.tick(Settings.fps)
-            self.watch_for_events()
             self.update()
             self.draw1()
+            print(Settings.punkte)
         pygame.quit()
 
+
     def update(self):
+        self.frontground.update()
         self.alien.update()
-        self.check_for_collision()
         self.bullet.update()
+        self.all_bullets.update()
+        self.check_for_collision()
+        self.watch_for_events()
+        self.gameover()
+
+    
+    def start(self):
+        for a in range(Settings.nof_bullets):
+            self.all_bullets.add(Bullet())
+            
+    def gameover(self):
+        if Settings.lives==0:
+            Settings.punkte = 0
+
 
     def check_for_collision(self):
-        self.bullet.hit = pygame.sprite.collide_mask(self.bullet, self.alien)
-        if self.bullet.hit:
-            self.alien.rect.top = 700
-            self.alien.rect.left = 270
-            self.alien.lives -= 1
+        self.alien.hit = False
+        for s in self.all_bullets:
+            if pygame.sprite.collide_mask(s,self.alien):
+                self.alien.hit = True
+                break
+        if self.alien.hit:
+             self.alien.rect.top =600
+             self.alien.rect.left=250
+             if Settings.lives > 0:
+                Settings.lives -=1
 
     def draw1(self):
         self.background.draw(self.screen)
         self.alien.draw(self.screen)
+        self.all_bullets.draw(self.screen)
         self.bullet.draw(self.screen)
+        self.frontground.draw(self.screen)
         pygame.display.flip()
 
     def watch_for_events(self):
