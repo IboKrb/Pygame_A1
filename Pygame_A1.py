@@ -96,7 +96,7 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.top >= Settings.window_height:
             self.rect.centerx = randint(0,Settings.window_width)
             self.rect.centery = randint(0,10)
-            Settings.punkte += 1
+            Settings.punkte += 4
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -161,7 +161,7 @@ class Game(object):
              self.alien.rect.left=250
              if Settings.lives > 0:
                 Settings.lives -=1
-
+                
     def draw1(self):
         self.background.draw(self.screen)
         self.alien.draw(self.screen)
