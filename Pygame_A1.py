@@ -1,9 +1,11 @@
 import pygame
 import os
 from random import randint
-#steuerung mit pfeiltasten
 
-class Settings: # Settigns einstellung mit allen variabel für programmieren
+
+# steuerung mit pfeiltasten
+
+class Settings:  # Settigns einstellung mit allen variabel für programmieren
     window_width = 600
     window_height = 800
     path_file = os.path.dirname(os.path.abspath(__file__))
@@ -24,13 +26,13 @@ class Settings: # Settigns einstellung mit allen variabel für programmieren
     lives = 3
 
 
-class Frontground(pygame.sprite.Sprite): #klasse Frontground alle schriften bilder die im vordergrund sind
-    def __init__(self) -> None:# initaliziert
+class Front(pygame.sprite.Sprite):  # klasse Frontground alle schriften bilder die im vordergrund sind
+    def __init__(self) -> None:  # initaliziert
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "heart.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (Settings.heart_width, Settings.heart_height))
 
-    def draw(self, screen):#im fenster dastellen
+    def draw(self, screen):  # im fenster dastellen
         screen.blit(self.image, (480, 730))
 
         punkte = pygame.font.SysFont(pygame.font.get_default_font(), 50)
@@ -42,11 +44,11 @@ class Frontground(pygame.sprite.Sprite): #klasse Frontground alle schriften bild
         screen.blit(livestxt, (530, 750))
 
 
-class Gameover(pygame.sprite.Sprite): #klasse Gameover wenn spiel verloren ist
+class Gameover(pygame.sprite.Sprite):  # klasse Gameover wenn spiel verloren ist
     def __init__(self) -> None:
         super().__init__()
 
-    def draw(self, screen):#im fenster dastellen
+    def draw(self, screen):  # im fenster dastellen
         gameover = pygame.font.SysFont(pygame.font.get_default_font(), 60)
         gameovertxt = gameover.render(f"Game over deine Punkte :{Settings.punkte2}", 5, (160, 2, 205))
         screen.blit(gameovertxt, (15, 400))
@@ -56,17 +58,17 @@ class Gameover(pygame.sprite.Sprite): #klasse Gameover wenn spiel verloren ist
         screen.blit(gameovertxt, (5, 450))
 
 
-class Background(pygame.sprite.Sprite): # klasse background/ hintergrund
+class Background(pygame.sprite.Sprite):  # klasse background/ hintergrund
     def __init__(self, filename="background.png") -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, filename)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (Settings.window_width, Settings.window_height))
 
-    def draw(self, screen): #im fenster dastellen
+    def draw(self, screen):  # im fenster dastellen
         screen.blit(self.image, (0, 0))
 
 
-class Alien(pygame.sprite.Sprite): #klasse alien
+class Alien(pygame.sprite.Sprite):  # klasse alien
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load(os.path.join(Settings.path_image, "alien.png")).convert_alpha()
@@ -78,7 +80,7 @@ class Alien(pygame.sprite.Sprite): #klasse alien
         self.speed_v = 40
         self.lives = Settings.lives
 
-    def update(self): #wand wird gesetzt vom spieler
+    def update(self):  # wand wird gesetzt vom spieler
         if self.rect.top >= Settings.window_height - 60:
             self.rect.top = Settings.window_height - 70
         if self.rect.left >= Settings.window_width - 50:
@@ -88,14 +90,15 @@ class Alien(pygame.sprite.Sprite): #klasse alien
         if self.rect.left <= 1:
             self.rect.left = 1
 
-    def draw(self, screen): #im fenster dastellen
+    def draw(self, screen):  # im fenster dastellen
         screen.blit(self.image, self.rect)
 
 
-class Bullet(pygame.sprite.Sprite): #klasse bullet
+class Bullet(pygame.sprite.Sprite):  # klasse bullet
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load(os.path.join(Settings.path_image, "bullet.png")).convert_alpha()# bullet wird eingefüht und converted
+        self.image = pygame.image.load(
+            os.path.join(Settings.path_image, "bullet.png")).convert_alpha()  # bullet wird eingefüht und converted
 
         scale_ratio = randint(1, 3) / 4
         self.image = pygame.transform.scale(self.image, (
@@ -108,18 +111,18 @@ class Bullet(pygame.sprite.Sprite): #klasse bullet
         self.speed_x = randint(1, 3)
         self.speed_y = randint(1, 3)
 
-    def update(self): #movment von bullet
+    def update(self):  # movment von bullet
         self.rect.move_ip(0, self.speed_x * self.speed_y)
         if self.rect.top >= Settings.window_height:
             self.rect.centerx = randint(0, Settings.window_width)
             self.rect.centery = randint(0, 10)
             Settings.punkte += 1
 
-    def draw(self, screen): #im fenster dastellen
+    def draw(self, screen):  # im fenster dastellen
         screen.blit(self.image, self.rect)
 
 
-class Game(object):# klasse game
+class Game(object):  # klasse game
     def __init__(self, ) -> None:
         super().__init__()
         os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100"
@@ -128,7 +131,7 @@ class Game(object):# klasse game
         pygame.display.set_caption(Settings.caption)
         self.screen = pygame.display.set_mode((Settings.window_width, Settings.window_height))
         self.clock = pygame.time.Clock()
-        self.frontground = Frontground()
+        self.front = Front()
         self.background = Background()
         self.bullet = Bullet()
         self.alien = Alien()
@@ -141,7 +144,7 @@ class Game(object):# klasse game
         self.zahl3 = 0
         self.zahl4 = 0
 
-    def run(self): #beim spiel start ausführen
+    def run(self):  # beim spiel start ausführen
         self.start()
         self.running = True
         while self.running:
@@ -149,7 +152,7 @@ class Game(object):# klasse game
             self.update()
         pygame.quit()
 
-    def update(self): # alle funktionen werden in eine gesteckt
+    def update(self):  # alle funktionen werden in eine gesteckt
         self.draw1()
         self.alien.update()
         self.bullet.update()
@@ -160,11 +163,11 @@ class Game(object):# klasse game
         self.punktespeichern()
         self.lvlupdate()
 
-    def start(self): #bullets werden erstelt
+    def start(self):  # bullets werden erstelt
         for a in range(Settings.nof_bullets):
             self.all_bullets.add(Bullet())
 
-    def lost(self): # spiel verloren
+    def lost(self):  # spiel verloren
         if Settings.lives == 0:
             Settings.punkte = 0
             self.alien.rect.top = 600
@@ -172,7 +175,7 @@ class Game(object):# klasse game
             for i in self.all_bullets.sprites():
                 i.remove(self.all_bullets)
 
-    def check_for_collision(self): #collision und alliens beim hitten entfernen und spawnen
+    def check_for_collision(self):  # collision und alliens beim hitten entfernen und spawnen
         self.alien.hit = False
         for s in self.all_bullets:
             if pygame.sprite.collide_mask(s, self.alien):
@@ -189,7 +192,7 @@ class Game(object):# klasse game
                 for a in range(Settings.nof_bullets):
                     self.all_bullets.add(Bullet())
 
-    def lvlupdate(self): #Schwierigkeits grad wird jenach punkten schneller und spawnt mehr
+    def lvlupdate(self):  # Schwierigkeits grad wird jenach punkten schneller und spawnt mehr
         if 0 <= Settings.punkte <= 30:
             self.bullet.speed_y += 1
             if self.bullet.speed_y >= 3:
@@ -241,22 +244,22 @@ class Game(object):# klasse game
             if self.zahl4 <= 1:
                 self.all_bullets.add(Bullet())
 
-    def punktespeichern(self): # zwischen speicher für punkte
+    def punktespeichern(self):  # zwischen speicher für punkte
         if Settings.punkte > 0:
             Settings.punkte2 = Settings.punkte
 
-    def draw1(self): # draw alle bitmaps in der funktion
+    def draw1(self):  # draw alle bitmaps in der funktion
         self.background.draw(self.screen)
         self.alien.draw(self.screen)
         self.all_bullets.draw(self.screen)
         self.bullet.draw(self.screen)
-        self.frontground.draw(self.screen)
+        self.front.draw(self.screen)
         if Settings.punkte == 0 and Settings.lives == 0:
             self.gameover.draw(self.screen)
 
         pygame.display.flip()
 
-    def watch_for_events(self): # steuerung
+    def watch_for_events(self):  # steuerung
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -283,6 +286,6 @@ class Game(object):# klasse game
                         self.all_bullets.add(Bullet())
 
 
-if __name__ == '__main__': # game start
+if __name__ == '__main__':  # game start
     game = Game()
     game.run()
