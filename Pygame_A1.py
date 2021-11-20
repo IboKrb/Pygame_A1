@@ -176,9 +176,10 @@ class Game(object):  # klasse game
                 i.remove(self.all_bullets)
 
     def check_for_collision(self):  # collision und alliens beim hitten entfernen und spawnen
+        self.bullet.hit = pygame.sprite.collide_mask(self.bullet,self.alien)
         self.alien.hit = False
         for s in self.all_bullets:
-            if pygame.sprite.collide_mask(s, self.alien):
+            if pygame.sprite.collide_mask(s, self.alien) or self.bullet.hit:
                 self.alien.hit = True
                 break
         if self.alien.hit:
